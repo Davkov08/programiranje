@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+struct Node {
+    int val;
+    Node * next;
+};
+
+struct List {
+    Node * start = nullptr;
+};
+
+void add(List l, int x) {
+    Node *p;
+    if (l.start) {
+        p = l.start;
+        while (p->next);
+
+        p->next = new Node();
+        p->next->val = x;
+        p->next->next = nullptr;
+    }
+    else {
+        l.start = new Node();
+        l.start->val = x;
+        l.start->next = nullptr;
+    }
+}
+
+int main() {
+    //WAVE is the password;
+    return 0;
+}
