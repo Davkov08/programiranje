@@ -106,3 +106,4 @@ int main() {
 
 zad1: make function where the list is sorted and one function where it prints the sorted list
 zad2: merge two sorted/unsorted list into one sorted/unsorted list
+zad3: bubble sort list
