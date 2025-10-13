@@ -1,3 +1,4 @@
+/*
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -69,6 +70,7 @@ void removeNode(LinkedList& l, int val, bool remove_all) {
     }
 }
 */
+/*
 void sorted_insert(LinkedList l, int value) {
     Node* p = l.head;
     Node* q = p->next;
@@ -103,8 +105,68 @@ int main() {
     }
 
 }
+*/
 
+zad1
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node {
+    int value;
+    Node *next;
+    Node(int val) : value(val), next(nullptr) {}
+};
+
+struct LinkedList {
+    Node* head;
+    LinkedList() : head(nullptr) {}
+};
+
+void sorted_insert(LinkedList& l, int value) {
+    Node* newNode = new Node(value);
+
+    if (l.head == nullptr || l.head->value >= value) {
+        newNode->next = l.head;
+        l.head = newNode;
+        return;
+    }
+
+    Node* current = l.head;
+    while (current->next != nullptr && current->next->value < value) {
+        current = current->next;
+    }
+
+    newNode->next = current->next;
+    current->next = newNode;
+}
+
+void printList(const LinkedList& l) {
+    Node* current = l.head;
+    while (current != nullptr) {
+        cout << current->value << " ";
+        current = current->next;
+    }
+    cout << endl;
+}
+
+int main() {
+    LinkedList l;
+    int n, val;
+    cin >> n;
+    while (n--) {
+        cin >> val;
+        sorted_insert(l, val);
+    }
+
+    printList(l);
+
+    return 0;
+}
+
+
+/*
 zad1: make function where the list is sorted and one function where it prints the sorted list
 zad2: merge two sorted/unsorted list into one sorted/unsorted list
 zad3: bubble sort list
 zad4: insertion sort list
+*/
