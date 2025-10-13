@@ -1,0 +1,108 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node {
+    int value;
+    Node *next;
+};
+
+struct LinkedList {
+    Node* head;
+};
+
+void addNode(Node* , int);
+void insert(LinkedList , int);
+void removeNode(LinkedList , int , bool = false);
+
+void insert(LinkedList l, int value) {
+    Node* p = l.head;
+    while (p->next) {
+        p = p->next;
+    }
+    addNode(p, value);
+}
+
+void addNode(Node* node, int val) {
+    Node* newNode = new Node();
+    newNode -> value = val;
+    node -> next = newNode -> next;
+    node -> next = newNode;
+}
+/* so dva pokazuvaci
+void removeNode(LinkedList l, int val, bool remove_all = false) {
+    Node *p,*q = l.head;
+    p = q -> next;
+    while (p->value != val && p->next) {
+        p = p->next;
+        q = q->next;
+    }
+    if (p->value == val) {
+        q->next = p->next;
+        delete p;
+    }
+}
+*/
+/*
+void removeNode(LinkedList& l, int val, bool remove_all) {
+    Node *p = l.head;
+    ///todo: write the correct way to work with the start node
+
+    if (p->next->value == val) {
+        Node* tmp = p->next->next;
+        delete p->next;
+        p->next = tmp;
+        if (!remove_all) break;
+    }
+
+    while (p->next) {
+        if (p->next->value == val) {
+            Node* tmp = p->next->next;
+            delete p->next;
+            p->next = tmp;
+            if (!remove_all) break;
+        }
+        p = p->next;
+    }
+    if (p->value == val) {
+        q->next = p->next;
+        delete p;
+    }
+}
+*/
+void sorted_insert(LinkedList l, int value) {
+    Node* p = l.head;
+    Node* q = p->next;
+    while (p->next) {
+        if (p->next > q->next) {
+            p = p->next;
+        }
+        else {
+            p = q->next;
+        }
+    }
+    addNode(p, value);
+}
+
+
+
+
+void print(LinkedList l, int value) {
+    Node* p = l.head;
+    while (p->next) {
+        p = p->next;
+    }
+}
+
+int main() {
+    LinkedList l;
+    int n,val;
+    cin>>n;
+    while (n--) {
+        cin>>val;
+        sorted_insert(l, val);
+    }
+
+}
+
+zad1: make function where the list is sorted and one function where it prints the sorted list
+zad2: merge two sorted/unsorted list into one sorted/unsorted list
