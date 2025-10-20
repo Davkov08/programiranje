@@ -1,0 +1,58 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node {
+    int value;
+    Node* next;
+    Node(int value) : value(value), next(nullptr) {}
+};
+
+struct LinkedLista {
+    Node* head;
+    int count;
+    LinkedLista() : head(nullptr), count(0) {}
+};
+
+void push(LinkedLista& stack, int value) {
+    Node* newNode = new Node(value);
+    newNode->next = stack.head;
+    stack.head = newNode;
+    stack.count++;
+}
+
+void pop(LinkedLista& stack) {
+    if (stack.head == nullptr) {
+        return;
+    }
+    Node* temp = stack.head;
+    stack.head = stack.head->next;
+    delete temp;
+    stack.count--;
+}
+
+int top(const LinkedLista& stack) {
+    if (stack.head == nullptr) {
+        return -1;
+    }
+    return stack.head->value;
+}
+
+int size(const LinkedLista& stack) {
+    return stack.count;
+}
+
+int main() {
+    LinkedLista stack;
+
+    push(stack, 10);
+    push(stack, 20);
+    push(stack, 30);
+
+    cout << top(stack) << "\n";
+    cout << size(stack) << "\n";
+
+    pop(stack);
+    cout << top(stack) << "\n";
+    cout << size(stack) << "\n";
+    return 0;
+}
