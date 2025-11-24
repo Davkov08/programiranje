@@ -41,7 +41,7 @@ void elka(int n, int t, int i=1){
     if (t==3 && i>2*n-1) return;
     if (t==4 && i>2*n-1) return;
 
-    int red = (i<=n ? i : (2*n-1));
+    int red = (i<=n ? i : (2*n-i));
     if (t==1) {
         print_gore(1,red);
         cout<<"\n";
@@ -60,7 +60,6 @@ void elka(int n, int t, int i=1){
         print_dole1(start,n);
         cout<<"\n";
     }
-
     elka(n, t, i+1);
 }
 
