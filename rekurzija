@@ -47,6 +47,7 @@ void elka(int t, int n, int i, int j){
     }
 }
 
+int brojac=2;
 void rek1(int n) {
     if(n==1){
         cout<<2<<" "<<1<<" ";
@@ -54,7 +55,10 @@ void rek1(int n) {
     }
     cout<<2*n<<" "<<2*n-1<<" ";
     rek1(n-1);
-
+    if (brojac<=n) {
+        cout<<brojac<<" ";
+        brojac++;
+    }
 }
 
 bool pal(const string &s, int l, int r){
@@ -69,5 +73,7 @@ int main() {
     cin>>n>>a>>b;
     cout<<doublefac(n)<<"\n";
     cout<<reversed(a)<<"\n";
-    cout<<pal(b,0,sizeof(b)-1)<<"\n";
+    rek1(n);
+    cout<<"\n";
+    cout<<pal(b,0,b.size()-1)<<"\n";
 }
