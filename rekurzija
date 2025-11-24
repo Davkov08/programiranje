@@ -29,7 +29,6 @@ void print_gore1(int i, int n) {
     print_gore1(i+1, n);
 }
 
-
 void print_dole1(int i, int n) {
     if (i>n) return;
     print_gore1(i+1, n);
