@@ -1,3 +1,4 @@
+/*
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -46,8 +47,92 @@ int main() {
     cout << "Kompresirana golemina: " << decoded.size() << endl;
 }
 /*
-originalna golemina   191,952,394
-kompresirana golemina   2,067,994
+originalna   golemina   16,543,952  bitovi = 2,067,994     bytes = 2MB
+kompresirana golemina   191,952,394 bitovi = 23,994,049.25 bytes = 23.99MB
+*/
 
-zasteda od 189,884,400 bitovi
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node {
+    unsigned char ch;
+    long long freq;
+    Node *left, *right;
+
+    Node(unsigned char c, long long f) : ch(c), freq(f), left(nullptr), right(nullptr) {}
+};
+
+// da vidime koj karakter se pojavuva najvekje pati
+struct Compare {
+    bool operator()(Node* a, Node* b) {
+        return a->freq > b->freq;
+    }
+};
+
+// so metod na hufman generirame kod za sekoj karakter
+void generateCodes(Node* root, string code, unordered_map<unsigned char, string>& huffmanCode) {
+    if (!root) return;
+
+    if (!root->left && !root->right)
+        huffmanCode[root->ch] = code;
+
+    generateCodes(root->left, code + "0", huffmanCode);
+    generateCodes(root->right, code + "1", huffmanCode);
+}
+
+int main() {
+    ifstream file("pg1399.txt", ios::binary);
+    if (!file) {
+        cout << "File error\n";
+        return 1;
+    }
+
+    // broime frekvencija za sekoj bajt
+    vector<long long> freq(256, 0);
+    vector<unsigned char> data;
+
+    unsigned char ch;
+    while (file.read((char*)&ch, 1)) {
+        freq[ch]++;
+        data.push_back(ch);
+    }
+    file.close();
+    long long originalBits = data.size() * 8;
+    priority_queue<Node*, vector<Node*>, Compare> pq;
+
+    for (int i = 0; i < 256; i++) {
+        if (freq[i] > 0)
+            pq.push(new Node((unsigned char)i, freq[i]));
+    }
+
+    // so greedy go gradime hufman drvoto
+    while (pq.size() > 1) {
+        Node* left = pq.top(); pq.pop();
+        Node* right = pq.top(); pq.pop();
+
+        Node* parent = new Node(0, left->freq + right->freq);
+        parent->left = left;
+        parent->right = right;
+
+        pq.push(parent);
+    }
+
+    Node* root = pq.top();
+
+    // gi generirame kodovite od kecovi i nuli
+    unordered_map<unsigned char, string> huffmanCode;
+    generateCodes(root, "", huffmanCode);
+
+    long long compressedBits = 0;
+    for (auto byte : data)
+        compressedBits += huffmanCode[byte].size();
+
+    cout << "Original size: " << originalBits << " bits\n";
+    cout << "Compressed size: " << compressedBits << " bits\n";
+
+    return 0;
+}
+/*
+originalna   golemina   16,543,952  bitovi = 2,067,994     bytes = 2MB
+kompresirana golemina    9,603,044  bitovi =                    1.4 MB
 */
