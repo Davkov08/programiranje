@@ -134,5 +134,5 @@ int main() {
 }
 /*
 originalna   golemina   16,543,952  bitovi = 2,067,994     bytes = 2MB
-kompresirana golemina    9,603,044  bitovi =                    1.4 MB
+kompresirana golemina    9,603,044  bitovi =                    1.2 MB
 */
