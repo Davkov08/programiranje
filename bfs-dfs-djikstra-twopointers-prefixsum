@@ -1,3 +1,118 @@
+/* prim
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int V;
+    cin>>V;
+    vector<vector<int>> g(V,vector<int>(V));
+    for(int i=0;i<V;i++)
+        for(int j=0;j<V;j++)
+            cin>>g[i][j];
+    vector<int> key(V,INT_MAX), parent(V,-1);
+    vector<bool> used(V,false);
+    key[0]=0;
+    for(int i=0;i<V-1;i++){
+        int u=-1;
+        for(int j=0;j<V;j++)
+            if(!used[j]&&(u==-1||key[j]<key[u]))
+                u=j;
+        used[u]=true;
+        for(int v=0;v<V;v++)
+            if(g[u][v]&& !used[v] && g[u][v]<key[v]){
+                key[v]=g[u][v];
+                parent[v]=u;
+            }
+    }
+    int cost=0;
+    for(int i=1;i<V;i++) cost+=g[parent[i]][i];
+    cout<<cost;
+}
+/*
+/* kruskal
+#include <bits/stdc++.h>
+using namespace std;
+struct DSU{
+    vector<int> p,r;
+    DSU(int n){
+        p.resize(n);
+        r.resize(n,1);
+        for(int i=0;i<n;i++) p[i]=i;
+    }
+    int find(int x){
+        return p[x]==x?x:p[x]=find(p[x]);
+    }
+    void unite(int a,int b){
+        a=find(a); b=find(b);
+        if(a!=b){
+            if(r[a]<r[b]) swap(a,b);
+            p[b]=a;
+            if(r[a]==r[b]) r[a]++;
+        }
+    }
+};
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int V,E;
+    cin>>V>>E;
+    vector<vector<int>> edges(E,vector<int>(3));
+    for(int i=0;i<E;i++)
+        cin>>edges[i][0]>>edges[i][1]>>edges[i][2];
+
+    sort(edges.begin(),edges.end(),[](auto &a,auto &b){return a[2]<b[2];});
+    DSU dsu(V);
+    int cost=0,cnt=0;
+    for(auto &e:edges){
+        int u=e[0],v=e[1],w=e[2];
+        if(dsu.find(u)!=dsu.find(v)){
+            dsu.unite(u,v);
+            cost+=w;
+            if(++cnt==V-1) break;
+        }
+    }
+    cout<<cost;
+}
+*/
+/*
+#include <bits/stdc++.h>
+using namespace std;
+vector<int> bellmanFord(int V, vector<vector<int>>& edges, int src) {
+    vector<int> dist(V, 1e8);
+    dist[src]=0;
+    for (int i=0;i<V;i++) {
+        for (vector<int> edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            int wt = edge[2];
+            if (dist[u]!=1e8 && dist[u]+wt<dist[v]) {
+                if(i==V-1)
+                    return {-1};
+                dist[v] = dist[u]+wt;
+            }
+        }
+    }
+    return dist;
+}
+
+int main() {
+    int v;
+    cin>>v;
+    vector<vector<int>> edges;
+    for (int i=0;i<v;i++) {
+        int a,b,tezina;
+        cin>>a>>b>>tezina;
+        edges.push_back({a,b,tezina});
+    }
+    int start = 0;
+    vector<int> ans = bellmanFord(v, edges, start);
+    for (int dist : ans)
+    {
+        cout<<dist<<" ";
+    }
+}
+*/
 /*
 #include <bits/stdc++.h>
 using namespace std;
