@@ -1,3 +1,28 @@
+// ===== MEMOIZATION TEMPLATE =====
+/*
+vector<int> memo(MAX, -1);
+int solve(int state) {
+    if ( base case ) return base_value;
+    if (memo[state] != -1) return memo[state];
+    int result =  recurrence using solve(smaller state) ;
+    return memo[state] = result;
+}
+*/
+
+// ===== TABULATION TEMPLATE =====
+/*
+vector<int> dp(n + 1, initial_value);
+dp[0] = base_case;
+
+for (int i = 1; i <= n; i++) {
+    for ( each choice ) {
+        if ( choice is valid ) {
+            dp[i] = best(dp[i], dp[i - choice] + cost);
+        }
+    }
+}
+return dp[n];
+*/
 /*
 #include <bits/stdc++.h>
 using namespace std;
@@ -69,38 +94,14 @@ bool wildcardMatch(const string& s, const string& p) {
             }
         }
     }
-
     return dp[m][n];
 }
-
 int main() {
     string s,p;
     cin>>s>>p;
     cout<<(wildcardMatch(s, p) ? "match" : "no match");
 }
 */
-
-
-
-/*
-input
-1
-6 5
-3 1 7 4 2
-2 1 3 1 1
-1 2 2 1 8
-2 2 1 5 3
-2 1 4 4 4
-5 2 7 5 1
-
-output
-32
-//7+1+8+5+4+7 = 32
-*/
-
-
-
-
 /*
 #include <bits/stdc++.h>
 using namespace std;
@@ -169,16 +170,13 @@ int main() {
 /*
 #include <bits/stdc++.h>
 using namespace std;
-
 vector<long long> memo;
-
 long long fib(int n) {
     if (n<=1) return n;
     if (memo[n]!=-1) return memo[n];
     memo[n]=fib(n-1)+fib(n-2);
     return memo[n];
 }
-
 long long fibt(int n) {
     if (n<=1) return n;
     vector<long long> dp(n+1);
@@ -189,7 +187,6 @@ long long fibt(int n) {
     }
     return dp[n];
 }
-
 int main() {
     int n;
     cin>>n;
@@ -221,7 +218,6 @@ int main() {
         cin>>coins[i];
     }
     cin>>target;
-    cout<<coinchange(coins, target)<<endl;
     cout<<coinChange(coins, target);
 }
 */
@@ -256,26 +252,236 @@ int main() {
     cout<<dp[target]<<endl;
 }
 */
-
-// ===== MEMOIZATION TEMPLATE =====
-vector<int> memo(MAX, -1);
-
-int solve(int state) {
-    if (/* base case */) return base_value;
-    if (memo[state] != -1) return memo[state];
-    int result = /* recurrence using solve(smaller state) */;
-    return memo[state] = result;
-}
-
-// ===== TABULATION TEMPLATE =====
-vector<int> dp(n + 1, initial_value);
-dp[0] = base_case;
-
-for (int i = 1; i <= n; i++) {
-    for (/* each choice */) {
-        if (/* choice is valid */) {
-            dp[i] = best(dp[i], dp[i - choice] + cost);
+/*
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    int n;
+    cin>>n;
+    vector<int> dp(n+1);
+    dp[0]=1;
+    for (int i=1;i<=n;i++) {
+        for (int j=1;j<=6;j++) {
+            if (i-j >= 0) {
+                dp[i] = (dp[i]+dp[i-j])%1000000007;
+            }
         }
     }
+    cout<<dp[n]<<endl;
 }
-return dp[n];
+*/
+/*
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    int n,target;
+    cin>>n>>target;
+    vector<int> coins(n);
+    for (int i=0;i<n;i++) {
+        cin>>coins[i];
+    }
+    vector<long long> dp(target+1,0);
+    dp[0]=1;
+    for (int i=1;i<=target;i++) {
+        for (auto coin : coins) {
+            if (i-coin >= 0) {
+                dp[i] = (dp[i]+dp[i-coin])%1000000007;
+            }
+        }
+    }
+    cout<<dp[target]<<endl;
+}
+*/
+/*
+#include <bits/stdc++.h>
+using namespace std;
+const long long MOD = 1e9+7;
+int main() {
+    int n,target;
+    cin>>n>>target;
+    vector<int> coins(n);
+    for (int i=0;i<n;i++) {
+        cin>>coins[i];
+    }
+    vector<long long> dp(target+1,0);
+    dp[0] = 1;
+    for (auto coin : coins) {
+        for (int i=coin; i<=target; i++) {
+            dp[i] = (dp[i]+dp[i-coin])%MOD;
+        }
+    }
+    cout<<dp[target]<<endl;
+}
+*/
+/*
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    int n;
+    cin>>n;
+    vector<int> dp(n+1,n+1);
+    dp[0]=0;
+    for (int i=1;i<=n;i++) {
+        int temp=i;
+        while (temp>0) {
+            int d = temp%10;
+            if (d>0) {
+                dp[i]=min(dp[i], dp[i-d]+1);
+            }
+            temp=temp/10;
+        }
+    }
+    cout<<dp[n]<<endl;
+}
+*/
+/*
+#include <bits/stdc++.h>
+using namespace std;
+const long long MOD = 1000000007;
+int main() {
+    int n;
+    cin>>n;
+    vector<string> grid(n);
+    for (int i=0;i<n;i++) {
+        cin>>grid[i];
+    }
+    vector<vector<long long>> dp(n,vector<long long>(n,0));
+    dp[0][0] = (grid[0][0] == '.') ? 1 : 0;
+    for (int i=1;i<n;i++) {
+        if (grid[i][0]=='*') {
+            dp[i][0] = 0;
+        }
+        else {
+            dp[i][0] = dp[i-1][0];
+        }
+    }
+    for (int i=1;i<n;i++) {
+        if (grid[0][i]=='*') {
+            dp[0][i] = 0;
+        }
+        else {
+            dp[0][i] = dp[0][i-1];
+        }
+    }
+    for (int i=1;i<n;i++) {
+        for (int j=1;j<n;j++) {
+            if (grid[i][j]=='*') {
+                dp[i][j] = 0;
+            }
+            else {
+                dp[i][j] = (dp[i-1][j] + dp[i][j-1])%MOD;
+            }
+        }
+    }
+    cout<<dp[n-1][n-1];
+}
+*/
+/*
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    long long n;
+    cin>>n;
+    vector<long long> coins={100,20,10,5,1};
+    long long sum=0;
+    for (long long coin : coins) {
+        sum += n/coin;
+        n %= coin;
+    }
+    cout<<sum;
+}
+*/
+/*
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        int ones = 0, twos = 0;
+        for (int i = 0; i < n; i++) {
+            int x; cin >> x;
+            if (x == 1) ones++;
+            else twos++;
+        }
+
+        if (ones % 2 != 0) {
+            cout << "NO\n";
+        } else if (ones == 0 && twos % 2 != 0) {
+            cout << "NO\n";
+        } else {
+            cout << "YES\n";
+        }
+    }
+    return 0;
+}
+*/
+/*
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    int n;
+    cin>>n;
+    vector<int> a(n);
+    for(int i=0;i<n;i++) {
+        cin>>a[i];
+    }
+    int maxi=1;
+    int ans=1;
+    for(int i=1;i<n;i++) {
+        if (a[i]>a[i-1]) {
+            maxi++;
+        }
+        else {
+            maxi = 1;
+        }
+        ans = max(ans,maxi);
+    }
+    cout<<ans;
+}
+*/
+/*
+int climbStairs(int n) {
+    if (n<=2) return n;
+    int prev1=2, prev2=1;
+    for (int i=3; i<=n; i++) {
+        int curr = prev1+prev2;
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    return prev1;
+}
+
+int minCostClimbingStairs(vector<int>& cost) {
+    int n = cost.size();
+    int prev2=0, prev1=0;
+    for (int i = 2; i <= n; i++) {
+        int curr = min(prev1+cost[i-1], prev2+cost[i-2]);
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    return prev1;
+}
+
+vector<vector<int>> generate(int numRows) {
+    vector<vector<int>> triangle(numRows);
+    for (int i = 0; i < numRows; ++i) {
+        triangle[i].assign(i + 1, 1);
+        for (int j = 1; j < i; ++j)
+            triangle[i][j] = triangle[i-1][j-1] + triangle[i-1][j];
+    }
+    return triangle;
+}
+
+int maxProfit(vector<int>& prices) {
+    int minPrice = INT_MAX;
+    int profit = 0;
+    for (int price : prices) {
+        minPrice = min(minPrice, price);
+        profit = max(profit, price - minPrice);
+    }
+    return profit;
+}
+*/
