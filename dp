@@ -1,0 +1,281 @@
+/*
+#include <bits/stdc++.h>
+using namespace std;
+
+int M, C, price[25][25];
+int memo[210][25];
+
+int shop(int money, int g) {
+    if (money<0) return -1000000000;
+    if (g==C) return M-money;
+    if (memo[money][g] != -1) return memo[money][g];
+    int ans = -1;
+    for (int model=1;model<=price[g][0];model++)
+        ans = max(ans,shop(money-price[g][model],g+1));
+    return memo[money][g] = ans;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int TC,i,j,score;
+    cin>>TC;
+    while (TC--) {
+        cin>>M>>C;
+        for (i=0;i<C;i++) {
+            cin>>price[i][0];
+            for (j=1;j<=price[i][0];j++)
+                cin>>price[i][j];
+        }
+        memset(memo,-1,sizeof memo);
+        score = shop(M,0);
+        if (score<0) cout<<"no solution\n";
+        else {
+            cout<<score<<"\n";
+            int curr_money = M;
+            for (int g=0;g<C;g++) {
+                for (int m=1;m<=price[g][0];m++) {
+                    int p=price[g][m];
+                    if (curr_money-p>=0 && shop(curr_money-p,g+1)==score) {
+                        cout<<p<<(g==C-1 ? "" : "+");
+                        curr_money -= p;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+*/
+/*
+#include <bits/stdc++.h>
+using namespace std;
+
+bool wildcardMatch(const string& s, const string& p) {
+    int m = s.size(), n = p.size();
+    vector<vector<bool>> dp(m+1,vector<bool>(n+1, false));
+    dp[0][0] = true;
+    for (int j=1;j<=n;j++) {
+        if (p[j-1] == '*')
+            dp[0][j] = dp[0][j-1];
+    }
+
+    for (int i=1;i<=m;i++) {
+        for (int j=1;j<=n;j++) {
+            if (p[j-1] == '*') {
+                dp[i][j] = dp[i][j-1] || dp[i-1][j];
+            } else if (p[j-1] == s[i-1]) {
+                dp[i][j] = dp[i-1][j-1];
+            }
+        }
+    }
+
+    return dp[m][n];
+}
+
+int main() {
+    string s,p;
+    cin>>s>>p;
+    cout<<(wildcardMatch(s, p) ? "match" : "no match");
+}
+*/
+
+
+
+/*
+input
+1
+6 5
+3 1 7 4 2
+2 1 3 1 1
+1 2 2 1 8
+2 2 1 5 3
+2 1 4 4 4
+5 2 7 5 1
+
+output
+32
+//7+1+8+5+4+7 = 32
+*/
+
+
+
+
+/*
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    int t;
+    cin>>t;
+    while (t--) {
+        int rows,cols;
+        cin>>rows>>cols;
+        vector<vector<int>> grid(rows, vector<int>(cols));
+        for (int i=0;i<rows;i++)
+            for (int j=0;j<cols;j++)
+                cin>>grid[i][j];
+
+        vector<vector<int>> dp(rows, vector<int>(cols, 0));
+        vector<vector<int>> parent(rows, vector<int>(cols, -1));
+
+        for (int j=0;j<cols;j++)
+            dp[0][j] = grid[0][j];
+
+        for (int i=1;i<rows;i++) {
+            for (int j=0;j<cols;j++) {
+                int best = dp[i-1][j], from=j;
+
+                if (j>0 && dp[i-1][j-1]>best) {
+                    best = dp[i-1][j-1];
+                    from = j-1;
+                }
+                if (j<cols-1 && dp[i-1][j+1]>best) {
+                    best = dp[i-1][j+1];
+                    from = j+1;
+                }
+
+                dp[i][j] = grid[i][j]+best;
+                parent[i][j] = from;
+            }
+        }
+
+        int lastCol = max_element(dp[rows-1].begin(), dp[rows-1].end())-dp[rows-1].begin();
+
+        cout<<"Max sum: "<<dp[rows-1][lastCol]<<"\n";
+
+        vector<pair<int,int>> path(rows);
+        int col = lastCol;
+        for (int i=rows-1;i>=0;i--) {
+            path[i] = {i, col};
+            if (i>0)
+                col = parent[i][col];
+        }
+
+        cout<<"Path:\n";
+        for (auto [r, c] : path)
+            cout<<"  row "<<r<<", col "<<c<<"  ->  value "<<grid[r][c]<<"\n";
+
+        cout<<"Sum: ";
+        for (int i=0;i<rows;i++) {
+            auto [r, c] = path[i];
+            cout<<grid[r][c];
+            if (i<rows-1)
+                cout<<" + ";
+        }
+        cout<<" = "<<dp[rows-1][lastCol]<<"\n";
+    }
+}
+*/
+/*
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<long long> memo;
+
+long long fib(int n) {
+    if (n<=1) return n;
+    if (memo[n]!=-1) return memo[n];
+    memo[n]=fib(n-1)+fib(n-2);
+    return memo[n];
+}
+
+long long fibt(int n) {
+    if (n<=1) return n;
+    vector<long long> dp(n+1);
+    dp[0]=0;
+    dp[1]=1;
+    for (int i=2;i<=n;i++) {
+        dp[i]=dp[i-1]+dp[i-2];
+    }
+    return dp[n];
+}
+
+int main() {
+    int n;
+    cin>>n;
+    memo.assign(n+1,-1);
+    cout<<fib(n)<<endl;
+    cout<<fibt(n);
+}
+*/
+/*
+#include <bits/stdc++.h>
+using namespace std;
+int coinChange(vector<int>& coins, int target) {
+    vector<int> dp(target+1, INT_MAX);
+    dp[0] = 0;
+    for (int i=1;i<=target;i++) {
+        for (auto coin : coins) {
+            if (coin<=i && dp[i-coin]!=INT_MAX) {
+                dp[i] = min(dp[i], dp[i-coin]+1);
+            }
+        }
+    }
+    return dp[target] == INT_MAX ? -1 : dp[target];
+}
+int main() {
+    int n,target;
+    cin>>n;
+    vector<int> coins(n);
+    for (int i=0;i<n;i++) {
+        cin>>coins[i];
+    }
+    cin>>target;
+    cout<<coinchange(coins, target)<<endl;
+    cout<<coinChange(coins, target);
+}
+*/
+/*
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    int n;
+    cin>>n;
+    vector<long long>dp(n+1);
+    dp[0]=0;
+    dp[1]=1;
+    for (int i=2;i<=n;i++) {
+        dp[i]=dp[i-1]+dp[i-2];
+    }
+    cout<<dp[n]<<endl;
+}
+*/
+/*
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    vector<int> coins={1,2};
+    int target=3;
+    vector<int> dp(target+1,0);
+    dp[0]=1;
+    for (auto coin : coins) {
+        for (int amount=coin; amount<=target; amount++) {
+            dp[amount] += dp[amount-coin];
+        }
+    }
+    cout<<dp[target]<<endl;
+}
+*/
+
+// ===== MEMOIZATION TEMPLATE =====
+vector<int> memo(MAX, -1);
+
+int solve(int state) {
+    if (/* base case */) return base_value;
+    if (memo[state] != -1) return memo[state];
+    int result = /* recurrence using solve(smaller state) */;
+    return memo[state] = result;
+}
+
+// ===== TABULATION TEMPLATE =====
+vector<int> dp(n + 1, initial_value);
+dp[0] = base_case;
+
+for (int i = 1; i <= n; i++) {
+    for (/* each choice */) {
+        if (/* choice is valid */) {
+            dp[i] = best(dp[i], dp[i - choice] + cost);
+        }
+    }
+}
+return dp[n];
