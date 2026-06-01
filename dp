@@ -495,4 +495,26 @@ bool isSubsequence(string s, string t) {
     }
     return i == s.size();
 }
+
+vector<int> countBits(int n) {
+        vector<int> ans(n + 1, 0);
+
+    for (int i = 1; i <= n; i++) {
+        ans[i] = ans[i >> 1] + (i & 1);
+    }
+
+    return ans;
+    }
+
+int maxRepeating(string sequence, string word) {
+    string current = word;
+    int k = 0;
+
+    while (sequence.find(current) != string::npos) {
+        k++;
+        current += word;
+    }
+
+    return k;
+}
 */
